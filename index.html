@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlos Jiu-Jitsu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #dcdee0;
+            color: #000;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background: #ffffff;
+            border-bottom: 2px solid #000;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 0.58rem;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            color: #000;
+            white-space: nowrap;
+            width: 100px;
+            margin-top: -10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #555;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: #000;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        .close-menu {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        /* Scroll Animation Styles */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .zoom-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .zoom-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .coaches-section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .coaches-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .coach-card {
+            text-align: center;
+            max-width: 500px;
+            flex: 1;
+        }
+
+        .coach-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            background: #f5f5f5;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .coach-image:hover {
+            transform: scale(1.05);
+        }
+
+        .coach-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .coach-info {
+            background: #ffffff;
+            border: 2px solid #000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .coach-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .coach-title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .coach-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .about-bjj {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .about-bjj h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .about-bjj p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .gallery-section {
+            max-width: 100%;
+            margin: 60px auto;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .gallery-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .gallery-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            animation: scroll 40s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .gallery-container:hover {
+            animation-play-state: paused;
+        }
+
+        .gallery-item {
+            flex: 0 0 auto;
+            width: 350px;
+            height: 350px;
+            border: 3px solid #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-placeholder {
+            font-size: 3rem;
+            color: #999;
+        }
+
+        .inclusive-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .inclusive-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .inclusive-section p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-footer {
+            max-width: 1200px;
+            margin: 60px auto 40px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .contact-phones {
+            text-align: left;
+        }
+
+        .contact-location {
+            text-align: right;
+        }
+
+        .contact-footer p {
+            margin: 8px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .contact-footer a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .contact-footer a:hover {
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            h1 {
+                width: 60px;
+                font-size: 0.35rem;
+                letter-spacing: 0.2px;
+                margin-top: -6px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .close-menu {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 250px;
+                background: #ffffff;
+                flex-direction: column;
+                gap: 30px;
+                padding: 80px 30px 30px;
+                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 1.1rem;
+            }
+
+            .coaches-container {
+                gap: 60px;
+            }
+
+            .coach-card {
+                max-width: 350px;
+            }
+
+            .coach-image {
+                width: 160px;
+                height: 160px;
+            }
+
+            .gallery-item {
+                width: 280px;
+                height: 280px;
+            }
+
+            .about-bjj h2,
+            .gallery-section h2,
+            .inclusive-section h2 {
+                font-size: 2rem;
+            }
+
+            .contact-footer {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .contact-phones,
+            .contact-location {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">
+                <!-- TO ADD YOUR LOGO: Uncomment the line below and replace "logo.png" with your logo filename -->
+                 <img src="athlos.png" alt="Athlos Logo"> 
+            </div>
+            <h1>ATHLOS JIU-JITSU</h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav id="nav-menu">
+            <button class="close-menu" onclick="toggleMenu()">×</button>
+            <a href="index.html">Home</a>
+            <a href="#about">Info</a>
+            <a href="#info">Schedule</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav-menu');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const body = document.body;
+            
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            
+            // Prevent scrolling when menu is open
+            if (nav.classList.contains('active')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = 'auto';
+            }
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('nav-menu');
+                const menuToggle = document.querySelector('.menu-toggle');
+                const body = document.body;
+                
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                body.style.overflow = 'auto';
+            });
+        });
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.fade-in, .slide-left, .slide-right, .zoom-in');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+    <section class="coaches-section fade-in">
+        <div class="coaches-container">
+            <div class="coach-card slide-left">
+                <div class="coach-image">
+                    <!-- TO ADD COACH PHOTO: Delete the emoji below and uncomment the <img> line, then add your image path -->
+                    
+                    <img src="jose.jpg" alt="Coach 1">
+                </div>
+                <div class="coach-info">
+                    <h2 class="coach-name">Jose Portillo</h2>
+                    <p class="coach-title">Black Belt | Head Instructor</p>
+                    <p class="coach-description">
+                        With over 15 years of experience in Brazilian Jiu-Jitsu, our head coach has trained champions and dedicated their life to the art. Specializing in competition strategy and fundamental techniques.
+                    </p>
+                </div>
+            </div>
+
+            <div class="coach-card slide-right">
+                <div class="coach-image">
+                    <!-- TO ADD COACH PHOTO: Delete the emoji below and uncomment the <img> line, then add your image path -->
+                    
+                  <img src="fernando.jpg" alt="Coach 1">
+                </div>
+                <div class="coach-info">
+                    <h2 class="coach-name">Fernando Koupparis</h2>
+                    <p class="coach-title">Black Belt | Head Instructor</p>
+                    <p class="coach-description">
+                        A passionate instructor focused on building strong fundamentals and confidence in students of all levels. Known for patient teaching and creating a welcoming environment for beginners.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-bjj fade-in">
+        <h2 class="zoom-in">About Brazilian Jiu-Jitsu</h2>
+        <p>
+            Brazilian Jiu-Jitsu is a martial art and combat sport that focuses on grappling and ground fighting. It emphasizes technique and leverage over strength, allowing smaller practitioners to defend themselves against larger opponents. More than just a physical discipline, BJJ builds mental resilience, problem-solving skills, and a supportive community. Whether you're looking to compete, get in shape, or learn self-defense, Brazilian Jiu-Jitsu offers a transformative journey for people of all ages and fitness levels.
+        </p>
+    </section>
+
+    <section class="gallery-section fade-in">
+        <h2 class="zoom-in">Gallery</h2>
+        <div class="gallery-container">
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                 <img src="gal11.jpg" alt="Gallery Image 1">
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                <img src="gal2.jpg" alt="Gallery Image 2"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                 <img src="gal3.jpg" alt="Gallery Image 3"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                <img src="gal4.jpg" alt="Gallery Image 4"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+             <img src="gal5.jpg" alt="Gallery Image 5"> 
+            </div>
+            <!-- Duplicate images for seamless loop -->
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                 <img src="gal11.jpg" alt="Gallery Image 1"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                <img src="gal2.jpg" alt="Gallery Image 2"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                 <img src="gal3.jpg" alt="Gallery Image 3"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                 <img src="gal4.jpg" alt="Gallery Image 4"> 
+            </div>
+            <div class="gallery-item">
+                <span class="gallery-placeholder"></span>
+                <img src="gal5.jpg" alt="Gallery Image 5"> 
+            </div>
+        </div>
+    </section>
+
+    <section class="inclusive-section fade-in">
+        <h2 class="zoom-in">For Everyone</h2>
+        <p>
+            Brazilian Jiu-Jitsu at Athlos welcomes everyone—women, men, and children alike. Our academy is a place where families train together and individuals of all backgrounds feel at home. With classes tailored to every skill level and fitness ability, we create an inclusive environment where everyone can thrive, build confidence, and discover their potential on the mats.
+        </p>
+    </section>
+
+    <div class="contact-footer fade-in">
+        <div class="contact-phones">
+            <p>Fernando: <a href="tel:99384180">+357 99 384180</a></p>
+            <p>Ismini: <a href="tel:99530846">+357 99 530846</a></p>
+        </div>
+        <div class="contact-location">
+            <p>📍 <a href="https://maps.app.goo.gl/Pn5eP9wPBbigQsyZ8" target="_blank">Makariou III Ave 23, Paphos 8221</a></p>
+        </div>
+    </div>
+</body>
+</html>
